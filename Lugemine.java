@@ -1,10 +1,26 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 public class Lugemine {
   public static void main(String[] args) throws java.io.FileNotFoundException {
-    short[][] pildid = loeCSV("data/test.csv");
+    // short[][] pildid = loeCSV("data/test.csv");
 
-    System.out.printf("Pilte kokku: %d%n", pildid.length);
+    // System.out.printf("Pilte kokku: %d%n", pildid.length);
+
+    Kaalud kaalud = loeJSON("data/kaalud.json");
+
+    double[][] w1 = kaalud.getW1();
+    double[][] w2 = kaalud.getW2();
+    double[] b1 = kaalud.getB1();
+    double[] b2 = kaalud.getB2();
+
+    System.out.printf("w1: %d x %d%n", w1.length, w1[0].length);
+
   }
 
   /**
@@ -42,5 +58,46 @@ public class Lugemine {
 
       return pildid.toArray(new short[0][]);
     }
+  }
+
+  /**
+   * https://stackoverflow.com/questions/2591098/how-to-parse-json-in-java
+   * https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
+   * https://github.com/stleary/JSON-java
+   * 
+   * @param failiAsukoht
+   * @throws FileNotFoundException
+   */
+  private static Kaalud loeJSON(String failiAsukoht) throws FileNotFoundException {
+    JSONObject jsonObjekt = new JSONObject(new FileReader(failiAsukoht));
+
+    JSONArray w1JsonArray = jsonObjekt.getJSONArray("w1");
+    double[][] w1 = JSONArrayDoubleMaatrikiks(w1JsonArray);
+    JSONArray w2JsonArray = jsonObjekt.getJSONArray("w2");
+    double[][] w2 = JSONArrayDoubleMaatrikiks(w2JsonArray);
+    JSONArray b1JsonArray = jsonObjekt.getJSONArray("b1");
+    double[] b1 = JSONArrayDoubleArrayks(b1JsonArray);
+    JSONArray b2JsonArray = jsonObjekt.getJSONArray("b2");
+    double[] b2 = JSONArrayDoubleArrayks(b2JsonArray);
+
+    Kaalud kaalud = new Kaalud(w1, w2, b1, b2);
+
+    return kaalud;
+  }
+
+  private static double[] JSONArrayDoubleArrayks(JSONArray jsonArray) {
+    double[] array = new double[jsonArray.length()];
+    for (int i = 0; i < jsonArray.length(); i++) {
+      array[i] = jsonArray.getDouble(i);
+    }
+    return array;
+  }
+
+  private static double[][] JSONArrayDoubleMaatrikiks(JSONArray jsonArray) {
+    double[][] array = new double[jsonArray.length()][];
+    for (int i = 0; i < jsonArray.length(); i++) {
+      array[i] = JSONArrayDoubleArrayks(jsonArray.getJSONArray(i));
+    }
+    return array;
   }
 }
