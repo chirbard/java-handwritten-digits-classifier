@@ -37,7 +37,7 @@ public class Lugemine {
    * @return massiv, kus iga element on massiiv pildi pikslite väärtustega (0-255)
    * @throws java.io.FileNotFoundException
    */
-  private static short[][] loeCSV(String failiAsukoht) throws java.io.FileNotFoundException {
+  public static short[][] loeCSV(String failiAsukoht) throws java.io.FileNotFoundException {
     java.io.File fail = new java.io.File(failiAsukoht);
 
     try (java.util.Scanner sc = new java.util.Scanner(fail, "UTF-8")) {
@@ -68,7 +68,7 @@ public class Lugemine {
    * @param failiAsukoht
    * @throws FileNotFoundException
    */
-  private static Kaalud loeJsonKaaludeks(String failiAsukoht) throws FileNotFoundException {
+  public static Kaalud loeJsonKaaludeks(String failiAsukoht) throws FileNotFoundException {
 
     String jsonStringina = loeJsonStringiks(failiAsukoht);
 
