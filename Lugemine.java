@@ -1,7 +1,5 @@
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -12,14 +10,16 @@ public class Lugemine {
 
     // System.out.printf("Pilte kokku: %d%n", pildid.length);
 
-    Kaalud kaalud = loeJSON("data/kaalud.json");
+    Kaalud kaalud = loeJsonKaaludeks("data/kaalud.json");
 
     double[][] w1 = kaalud.getW1();
-    double[][] w2 = kaalud.getW2();
-    double[] b1 = kaalud.getB1();
-    double[] b2 = kaalud.getB2();
 
-    System.out.printf("w1: %d x %d%n", w1.length, w1[0].length);
+    for (int i = 0; i < w1.length; i++) {
+      for (int j = 0; j < w1[i].length; j++) {
+        System.out.printf("%f ", w1[i][j]);
+      }
+      System.out.println();
+    }
 
   }
 
@@ -68,8 +68,11 @@ public class Lugemine {
    * @param failiAsukoht
    * @throws FileNotFoundException
    */
-  private static Kaalud loeJSON(String failiAsukoht) throws FileNotFoundException {
-    JSONObject jsonObjekt = new JSONObject(new FileReader(failiAsukoht));
+  private static Kaalud loeJsonKaaludeks(String failiAsukoht) throws FileNotFoundException {
+
+    String jsonStringina = loeJsonStringiks(failiAsukoht);
+
+    JSONObject jsonObjekt = new JSONObject(jsonStringina);
 
     JSONArray w1JsonArray = jsonObjekt.getJSONArray("w1");
     double[][] w1 = JSONArrayDoubleMaatrikiks(w1JsonArray);
@@ -85,6 +88,17 @@ public class Lugemine {
     return kaalud;
   }
 
+  private static String loeJsonStringiks(String failiAsukoht) throws FileNotFoundException {
+    java.io.File fail = new java.io.File(failiAsukoht);
+    try (java.util.Scanner sc = new java.util.Scanner(fail, "UTF-8")) {
+      StringBuilder sb = new StringBuilder();
+      while (sc.hasNextLine()) {
+        sb.append(sc.nextLine());
+      }
+      return sb.toString();
+    }
+  }
+
   private static double[] JSONArrayDoubleArrayks(JSONArray jsonArray) {
     double[] array = new double[jsonArray.length()];
     for (int i = 0; i < jsonArray.length(); i++) {
@@ -94,10 +108,10 @@ public class Lugemine {
   }
 
   private static double[][] JSONArrayDoubleMaatrikiks(JSONArray jsonArray) {
-    double[][] array = new double[jsonArray.length()][];
+    double[][] maatriks = new double[jsonArray.length()][];
     for (int i = 0; i < jsonArray.length(); i++) {
-      array[i] = JSONArrayDoubleArrayks(jsonArray.getJSONArray(i));
+      maatriks[i] = JSONArrayDoubleArrayks(jsonArray.getJSONArray(i));
     }
-    return array;
+    return maatriks;
   }
 }
