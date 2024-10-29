@@ -35,9 +35,9 @@ public class Lugemine {
    * 
    * @param failiAsukoht - CSV faili asukoht
    * @return massiv, kus iga element on massiiv pildi pikslite väärtustega (0-255)
-   * @throws java.io.FileNotFoundException
+   * @throws FileNotFoundException
    */
-  public static short[][] loeCSV(String failiAsukoht) throws java.io.FileNotFoundException {
+  public static short[][] loeCSV(String failiAsukoht) throws FileNotFoundException {
     java.io.File fail = new java.io.File(failiAsukoht);
 
     try (java.util.Scanner sc = new java.util.Scanner(fail, "UTF-8")) {
