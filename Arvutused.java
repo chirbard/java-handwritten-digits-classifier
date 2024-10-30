@@ -1,5 +1,4 @@
 public class Arvutused {
-
     /**
      * Maatriksi korrutamine vektoriga.
      * <p>
@@ -59,7 +58,8 @@ public class Arvutused {
     }
 
     /**
-     * ReLU funktsioon, negatiivne element massiivis muudetakse 0-ks.
+     * mittenegatiivne lineaar funktsioon (ingl. k. ReLU), negatiivne element
+     * massiivis muudetakse 0-ks.
      * <p>
      * Kasutatud Allikad:
      * <ul>
