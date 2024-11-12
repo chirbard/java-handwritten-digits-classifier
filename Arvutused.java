@@ -139,4 +139,19 @@ public class Arvutused {
         }
         return indeks;
     }
+
+    /**
+     * Teisendab sisendmassivi short tüübist double tüübiks,
+     * normaliseerides väärtused vahemikku [0, 1].
+     * 
+     * @param massiiv - short[] massiiv, mida soovime teisendada
+     * @return double[] massiiv, kus iga väärtus on vahemikus [0, 1]
+     */
+    public static double[] shortMassiivDoubleks(short[] massiiv) {
+        double[] doubleMassiiv = new double[massiiv.length];
+        for (int i = 0; i < massiiv.length; i++) {
+            doubleMassiiv[i] = (double) massiiv[i] / 1000;
+        }
+        return doubleMassiiv;
+    }
 }
