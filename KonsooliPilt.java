@@ -1,5 +1,7 @@
+/**
+ * Staatiline klass, mille meetodiga saab konsooli printida heleduse järgi pildi
+ */
 public class KonsooliPilt {
-
     /**
      * Kuvab terminali aknas ASCII trükimärkidest tehtud pildi
      * <p>
@@ -10,12 +12,9 @@ public class KonsooliPilt {
      * </ul>
      * <p>
      * 
-     * @param massiiv      - pildi maatriks massiivina
-     * @param vabaliikmed1 - esimese neuron kihi vabaliikmed
-     * @param kaal1        - esimese neuron kihi kaalud
-     * @param vabaliikmed2 - teise neuron kihi vabaliikmed
-     * @param kaal2        - teise neuron kihi kaalud
-     * @return number vahemikus 0-9, mudeli arvamus
+     * @param pikkus   - pildi pikkus
+     * @param laius    - pildi laius
+     * @param maatriks - pildi pikslite heleduse maatriks
      */
     public static void intensiivsusPilt(int pikkus, int laius, short[] maatriks) {
         char[] heledusTugevus = { ' ', '.', ':', '-', '=', '+', '*', '#', '%', '@' };

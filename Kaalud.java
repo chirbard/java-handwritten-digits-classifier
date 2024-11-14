@@ -1,4 +1,14 @@
-// create interface Kaalud
+/**
+ * Klass, mis hoiustab mudeli kaalusid ja vabaliikmeid
+ * Sellest klassist on vajalike kaale ja vabaliikmeid lihtne kätte saada.
+ * 
+ * <ul>
+ * <li>w1 - mudeli esimese kihi kaalud</li>
+ * <li>w2 - mudeli teise kihi kaalud</li>
+ * <li>b1 - mudeli esimese kihi vabaliige</li>
+ * <li>b2 - mudeli teise kihi vabaliige</li>
+ * </ul>
+ */
 public class Kaalud {
     private double[][] w1;
     private double[][] w2;

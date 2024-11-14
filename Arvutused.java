@@ -1,3 +1,6 @@
+/**
+ * Staatiline klass, kus on mudeli kasutamiseks vajalikud arvutus meetodid.
+ */
 public class Arvutused {
     /**
      * Maatriksi korrutamine vektoriga.
