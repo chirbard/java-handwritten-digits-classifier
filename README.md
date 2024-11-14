@@ -6,7 +6,7 @@ Trained model from: https://www.kaggle.com/code/wwsalmon/simple-mnist-nn-from-sc
 
 ## Installation and compiling
 ### 1. Download source
-### 2. compile
+### 2. Compile
 ```sh
 javac Tuvastamine.java
 ```
@@ -20,4 +20,84 @@ Place the data in folder `data/test.csv`
 ### 2. Run the program
 ```sh
 java Tuvastamine
+```
+
+## Example usage
+```
+$ java Tuvastamine 
+Mitmendat pilti soovid testida (1-28000): 
+400
+                            
+                            
+                            
+                            
+                            
+                            
+           .+%@@@@#:        
+      .:+*@@@@@@@@@@-       
+      +@@@@@@*-.  :@%.      
+      +@@@*.    .*@@@.      
+      .::       *%%##.      
+              .=@@@*        
+            .:#@@@@@#       
+            #@@@*- :#*      
+            -@+-    :@:     
+             .      -@+     
+                    -@%     
+                   =@@*     
+                 .+@@%:     
+                .%@@@=      
+   #.         :#@@@#:       
+   *@+- ..-=#@@@@@=         
+   =@@@@@@@@@@@@:           
+     +@@@@@@**-.            
+                            
+                            
+                            
+                            
+Mudeli hinnang: 3
+
+Kas soovid veel testida? (jah/ei)
+jah
+
+Mitmendat pilti soovid testida (1-28000): 
+-45
+Sellise indeksiga pilti pole, proovi uuesti!
+
+Mitmendat pilti soovid testida (1-28000): 
+1
+                            
+                            
+                            
+                            
+               -##.         
+          +@@@@@@@.         
+         :%@@@@@@@%#.       
+         %@@@@@@@@@@%:      
+         :@@@@=..=@@@+      
+          :===.   %@@@      
+                  :@@@      
+                  .@@@      
+                  -@@@      
+                  %@@@      
+            :--  .%@@#      
+        =-##%@@##%@@%.      
+    .=*@@@@@@@@@@@@@%=      
+    =@@@@@%%@@@@@@@@@@*     
+    @@@@#- .#@@@@==#@@@*    
+    @@@@@%%%@@@%:   *%@@    
+    *@@@@@@@@%=:     :@*    
+     .*****.                
+                            
+                            
+                            
+                            
+                            
+                            
+Mudeli hinnang: 2
+
+Kas soovid veel testida? (jah/ei)
+ei
+
+$ 
 ```
