@@ -93,26 +93,26 @@ public class Tuvastamine {
     /**
      * Kasutajalt ühe või teise valiku küsimine konsoolis.
      * 
-     * @param skanner      - sisendi skanner objekti, mida kasutatakse kasutaja
-     *                     sisendi lugemiseks
-     * @param konditsioon1 - esimene valik (näiteks "jah")
-     * @param konditsioon2 - teine valik (näiteks "ei")
-     * @return true - kasutaja valib konditsioon1, false - kasutaja valib
-     *         konditsioon2
+     * @param skanner - sisendi skanner objekti, mida kasutatakse kasutaja
+     *                sisendi lugemiseks
+     * @param valik1  - esimene valik (näiteks "jah")
+     * @param valik2  - teine valik (näiteks "ei")
+     * @return true - kasutaja valib esimese valiku, false - kasutaja valib
+     *         teise valiku
      */
-    public static boolean kasJätkata(Scanner skanner, String konditsioon1, String konditsioon2) {
+    public static boolean kasJätkata(Scanner skanner, String valik1, String valik2) {
         boolean jätka = false;
 
-        System.out.println("Kas soovid veel testida? (" + konditsioon1 + "/" + konditsioon2 + ")");
+        System.out.println("Kas soovid veel testida? (" + valik1 + "/" + valik2 + ")");
         String vastus = skanner.nextLine();
 
-        if (vastus.equalsIgnoreCase(konditsioon1)) {
+        if (vastus.equalsIgnoreCase(valik1)) {
             jätka = true;
-        } else if (vastus.equalsIgnoreCase(konditsioon2)) {
+        } else if (vastus.equalsIgnoreCase(valik2)) {
             jätka = false;
         } else {
-            System.out.println("Palun sisesta kas '" + konditsioon1 + "' või '" + konditsioon2 + "'!\n");
-            jätka = kasJätkata(skanner, konditsioon1, konditsioon2);
+            System.out.println("Palun sisesta kas '" + valik1 + "' või '" + valik2 + "'!\n");
+            jätka = kasJätkata(skanner, valik1, valik2);
         }
         System.out.println();
         return jätka;
