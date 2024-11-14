@@ -1,27 +1,61 @@
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
+/**
+ * Klass, mis kasutab Lugemine, Arvutused ja Konsoolipilt klasse , et lugeda,
+ * arvutada mudeli vastust ja kuvada numbrit konsooli.
+ */
 public class Tuvastamine {
     public static void main(String[] args) throws FileNotFoundException {
         // Kõik test.csv failis asuvad pildid
         short[][] pildid = Lugemine.loeCSV("data/test.csv");
 
-        // Mitmendat pilti testida tahame: n - 1
-        int pildiIndeks = 9;
-
-        double[] pilt = new double[784];
-
-        for (int i = 0; i < pildid[pildiIndeks].length; i++) {
-            pilt[i] = (double) pildid[pildiIndeks][i] / 1000;
-        }
-
         // Mudeli tööks vajalikud kaalud ja vabaliikmed
         Kaalud kaalud = Lugemine.loeJsonKaaludeks("data/kaalud.json");
 
-        // Kuvame pildi terminali aknas
-        KonsooliPilt.intensiivsusPilt(28, 28, pildid[pildiIndeks]);
+        // Initsialiseerime skänneri
+        java.util.Scanner sc = new java.util.Scanner(System.in);
 
-        System.out.println("Mudeli hinnang: "
-                + tuvastaNumber(pilt, kaalud.getB1(), kaalud.getW1(), kaalud.getB2(), kaalud.getW2()));
+        while (true) {
+            System.out.println("Mitmendat pilti soovid testida (1-" + pildid.length + "): ");
+
+            int pildiIndeks = 0;
+
+            try {
+                pildiIndeks = sc.nextInt();
+                sc.nextLine();
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Palun sisesta korrektne number!\n");
+                sc.nextLine();
+                continue;
+            }
+
+            if (pildiIndeks < 1 || pildiIndeks > pildid.length) {
+                System.out.println("Sellise indeksiga pilti pole, proovi uuesti!\n");
+                continue;
+            }
+
+            // Vähendame indeksit, sest massiiv on nullist indekseeritud
+            pildiIndeks--;
+
+            double[] pilt = Arvutused.shortMassiivDoubleks(pildid[pildiIndeks]);
+
+            KonsooliPilt.intensiivsusPilt(28, 28, pildid[pildiIndeks]);
+
+            System.out.println("Mudeli hinnang: "
+                    + tuvastaNumber(pilt, kaalud.getB1(), kaalud.getW1(), kaalud.getB2(), kaalud.getW2())
+                    + System.lineSeparator());
+
+            // Kui kasutaja soovib veel testida, siis jätkame programmi tööga
+            if (kasJätkata(sc, "jah", "ei")) {
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        // Sulgeme skänneri
+        sc.close();
     }
 
     /**
@@ -54,5 +88,33 @@ public class Tuvastamine {
         double[] A2 = Arvutused.softmax(Z2);
 
         return Arvutused.suurimaVäärtuseIndeksMassiivis(A2);
+    }
+
+    /**
+     * Kasutajalt ühe või teise valiku küsimine konsoolis.
+     * 
+     * @param skanner      - sisendi skanner objekti, mida kasutatakse kasutaja
+     *                     sisendi lugemiseks
+     * @param konditsioon1 - esimene valik (näiteks "jah")
+     * @param konditsioon2 - teine valik (näiteks "ei")
+     * @return true - kasutaja valib konditsioon1, false - kasutaja valib
+     *         konditsioon2
+     */
+    public static boolean kasJätkata(Scanner skanner, String konditsioon1, String konditsioon2) {
+        boolean jätka = false;
+
+        System.out.println("Kas soovid veel testida? (" + konditsioon1 + "/" + konditsioon2 + ")");
+        String vastus = skanner.nextLine();
+
+        if (vastus.equalsIgnoreCase(konditsioon1)) {
+            jätka = true;
+        } else if (vastus.equalsIgnoreCase(konditsioon2)) {
+            jätka = false;
+        } else {
+            System.out.println("Palun sisesta kas '" + konditsioon1 + "' või '" + konditsioon2 + "'!\n");
+            jätka = kasJätkata(skanner, konditsioon1, konditsioon2);
+        }
+        System.out.println();
+        return jätka;
     }
 }
