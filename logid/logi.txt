@@ -1,2 +1,12 @@
-Dec 12, 2024 10:30:28 AM Tuvastamine main
+Dec 12, 2024 11:40:17 AM Tuvastamine main
 INFO: Rakendus algas
+Dec 12, 2024 11:40:21 AM Tuvastamine main
+INFO: Kasutaja valis pildi indeksiga 5
+Dec 12, 2024 11:40:21 AM Tuvastamine main
+INFO: Mudeli hinnang: 3
+Dec 12, 2024 11:40:23 AM Tuvastamine kasJätkata
+WARNING: Kasutaja sisestas: dfgghfgh mis pole valikute hulgas: 'jah' või 'ei'
+Dec 12, 2024 11:40:27 AM Tuvastamine kasJätkata
+INFO: Kasutaja soovib veel testida
+Dec 12, 2024 11:40:30 AM Tuvastamine main
+WARNING: Kasutaja sisestas numbri: 0 mis pole vahemikus 1-28000
