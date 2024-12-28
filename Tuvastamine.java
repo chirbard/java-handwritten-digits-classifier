@@ -6,56 +6,94 @@ import java.util.Scanner;
  * arvutada mudeli vastust ja kuvada numbrit konsooli.
  */
 public class Tuvastamine {
-    public static void main(String[] args) throws FileNotFoundException {
-        // Kõik test.csv failis asuvad pildid
-        short[][] pildid = Lugemine.loeCSV("data/test.csv");
+    public static void main(String[] args) {
+        // Kirjutame logi faili, et programmi töö algas
+        LogimiseSingleton.getInstants().getLogija().info("Rakenduse töö algas");
 
-        // Mudeli tööks vajalikud kaalud ja vabaliikmed
-        Kaalud kaalud = Lugemine.loeJsonKaaludeks("data/kaalud.json");
+        try {
 
-        // Initsialiseerime skänneri
-        java.util.Scanner sc = new java.util.Scanner(System.in);
-
-        while (true) {
-            System.out.println("Mitmendat pilti soovid testida (1-" + pildid.length + "): ");
-
-            int pildiIndeks = 0;
-
+            // Kõik test.csv failis asuvad pildid
+            short[][] pildid;
             try {
-                pildiIndeks = sc.nextInt();
-                sc.nextLine();
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Palun sisesta korrektne number!\n");
-                sc.nextLine();
-                continue;
+                pildid = Lugemine.loeCSV("data/test.csv");
+            } catch (FileNotFoundException e) {
+                LogimiseSingleton.getInstants().getLogija().severe("Faili test.csv ei leitud");
+                System.out.println("Faili test.csv ei leitud");
+                throw e;
             }
 
-            if (pildiIndeks < 1 || pildiIndeks > pildid.length) {
-                System.out.println("Sellise indeksiga pilti pole, proovi uuesti!\n");
-                continue;
+            // Mudeli tööks vajalikud kaalud ja vabaliikmed
+            Kaalud kaalud;
+            try {
+                kaalud = Lugemine.loeJsonKaaludeks("data/kaalud.json");
+            } catch (FileNotFoundException e) {
+                LogimiseSingleton.getInstants().getLogija().severe("Faili kaalud.json ei leitud");
+                System.out.println("Faili kaalud.json ei leitud");
+                throw e;
             }
 
-            // Vähendame indeksit, sest massiiv on nullist indekseeritud
-            pildiIndeks--;
+            // Initsialiseerime skänneri
+            java.util.Scanner sc = new java.util.Scanner(System.in);
 
-            double[] pilt = Arvutused.shortMassiivDoubleks(pildid[pildiIndeks]);
+            while (true) {
+                System.out.println("Mitmendat pilti soovid testida (1-" + pildid.length + "): ");
 
-            KonsooliPilt.intensiivsusPilt(28, 28, pildid[pildiIndeks]);
+                int pildiIndeks = 0;
 
-            System.out.println("Mudeli hinnang: "
-                    + tuvastaNumber(pilt, kaalud.getB1(), kaalud.getW1(), kaalud.getB2(), kaalud.getW2())
-                    + System.lineSeparator());
+                try {
+                    pildiIndeks = sc.nextInt();
+                    sc.nextLine();
+                } catch (java.util.InputMismatchException e) {
+                    LogimiseSingleton.getInstants().getLogija()
+                            .warning("Kasutaja sisestas: " + sc.next() + " mis pole number");
+                    System.out.println("Palun sisesta korrektne number!\n");
+                    sc.nextLine();
+                    continue;
+                }
 
-            // Kui kasutaja soovib veel testida, siis jätkame programmi tööga
-            if (kasJätkata(sc, "jah", "ei")) {
-                continue;
-            } else {
-                break;
+                if (pildiIndeks < 1 || pildiIndeks > pildid.length) {
+                    LogimiseSingleton.getInstants().getLogija().warning("Kasutaja sisestas numbri: " + pildiIndeks
+                            + " mis pole vahemikus 1-" + pildid.length);
+                    System.out.println("Sellise indeksiga pilti pole, proovi uuesti!\n");
+                    continue;
+                }
+
+                LogimiseSingleton.getInstants().getLogija().info("Kasutaja valis pildi indeksiga " + pildiIndeks);
+
+                // Vähendame indeksit, sest massiiv on nullist indekseeritud
+                pildiIndeks--;
+
+                double[] pilt = Arvutused.shortMassiivDoubleks(pildid[pildiIndeks]);
+
+                KonsooliPilt.intensiivsusPilt(28, 28, pildid[pildiIndeks]);
+
+                int mudeliHinnang = tuvastaNumber(pilt, kaalud.getB1(), kaalud.getW1(), kaalud.getB2(), kaalud.getW2());
+
+                LogimiseSingleton.getInstants().getLogija().info("Mudeli hinnang: " + mudeliHinnang);
+
+                System.out.println("Mudeli hinnang: "
+                        + mudeliHinnang
+                        + System.lineSeparator());
+
+                // Kui kasutaja soovib veel testida, siis jätkame programmi tööga
+                if (kasJätkata(sc, "jah", "ei")) {
+                    continue;
+                } else {
+                    break;
+                }
             }
+
+            // Sulgeme skänneri
+            sc.close();
+
+        } catch (Exception e) {
+            // kui programmi töö jooksul tekib viga, siis logime selle ja kuvame konsoolis
+            LogimiseSingleton.getInstants().getLogija().severe("Midagi läks valesti: " + e.getMessage());
+            System.out.println("Midagi läks valesti: " + e.getMessage());
+        } finally {
+            // Kirjutame logi faili, et programmi töö lõppes
+            LogimiseSingleton.getInstants().getLogija().info("Rakenduse töö lõppes");
         }
-
-        // Sulgeme skänneri
-        sc.close();
     }
 
     /**
@@ -107,10 +145,14 @@ public class Tuvastamine {
         String vastus = skanner.nextLine();
 
         if (vastus.equalsIgnoreCase(valik1)) {
+            LogimiseSingleton.getInstants().getLogija().info("Kasutaja soovib veel testida");
             jätka = true;
         } else if (vastus.equalsIgnoreCase(valik2)) {
+            LogimiseSingleton.getInstants().getLogija().info("Kasutaja ei soovi rohkem pilte testida");
             jätka = false;
         } else {
+            LogimiseSingleton.getInstants().getLogija().warning("Kasutaja sisestas: " + vastus
+                    + " mis pole valikute hulgas: '" + valik1 + "' või '" + valik2 + "'");
             System.out.println("Palun sisesta kas '" + valik1 + "' või '" + valik2 + "'!\n");
             jätka = kasJätkata(skanner, valik1, valik2);
         }
