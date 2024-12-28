@@ -1,8 +1,0 @@
-Dec 28, 2024 4:18:40 PM Tuvastamine main
-INFO: Rakenduse töö algas
-Dec 28, 2024 4:18:45 PM Tuvastamine main
-SEVERE: Faili kaalud.json ei leitud
-Dec 28, 2024 4:18:45 PM Tuvastamine main
-SEVERE: Midagi läks valesti: data/kaalud.json (No such file or directory)
-Dec 28, 2024 4:18:45 PM Tuvastamine main
-INFO: Rakenduse töö lõppes
