@@ -116,13 +116,13 @@ $
 #### 2. Compile
 
 ```sh
-javac Main.java
+javac --module-path lib --add-modules javafx.controls,javafx.fxml -d bin Main.java
 ```
 
 #### 3. Run the program
 
 ```sh
-java Main.java
+java --module-path lib --add-modules javafx.controls,javafx.fxml -cp bin Main
 ```
 
 #### 4. Example usage
