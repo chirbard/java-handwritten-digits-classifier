@@ -9,83 +9,88 @@ public class Controller {
 
     private static final int ruudustikuSuurus = 28; // 28x28 ruudustik
     private static final int ruuduSuurus = 20;
-    private static final Color algVärv = Color.WHITE; // Default cell color
-    private static final Color värvitud = Color.BLACK; // Highlighted cell color
-    private static final Color piiriVärv = Color.LIGHTGRAY; // Border color
+    private static final Color algVärv = Color.WHITE;
+    private static final Color värvitud = Color.BLACK; 
+    private static final Color piiriVärv = Color.LIGHTGRAY;
 
     private int[][] andmed = new int[ruudustikuSuurus][ruudustikuSuurus];
 
     @FXML
-    private GridPane gridPane; // This field is linked to the GridPane in the FXML file
+    private GridPane ruudustik; 
 
     public void initialize() {
         LogimiseSingleton.getInstants().getLogija().info("Ruudustiku loomine algas");
 
-        if (gridPane == null) {
+        if (ruudustik == null) {
             LogimiseSingleton.getInstants().getLogija().severe("Ruudustik pole initsialiseeritud");
             System.out.println("Ruudustik pole initsialiseeritud");
             return;
         }
 
-        // Dynamically create the 28x28 grid of rectangles
         for (int rida = 0; rida < ruudustikuSuurus; rida++) {
             for (int tulp = 0; tulp < ruudustikuSuurus; tulp++) {
 
                 Rectangle ruut = new Rectangle(ruuduSuurus, ruuduSuurus, algVärv);
+
                 ruut.setStroke(piiriVärv);
+                ruut.setOnMousePressed(e -> hiirVajutatud(e));
+                ruut.setOnMouseDragEntered(e -> lohistamiseTuvastamine(e));
+                ruut.setOnDragDetected(e -> lohistamine(e));
 
-                // Handle mouse events for the rectangles
-                ruut.setOnMousePressed(this::onMousePressed);
-                ruut.setOnMouseDragEntered(this::onMouseDragEntered);
-                ruut.setOnDragDetected(this::onDragDetected);
-
-                // Add the rectangle to the GridPane at the specified row and column
-                gridPane.add(ruut, tulp, rida);
+                // Lisame loodud ruudu ruudustikule
+                ruudustik.add(ruut, tulp, rida);
             }
         }
 
-        // Add a button to clear the grid
-        Button clearButton = new Button("Clear");
-        clearButton.setOnAction(e -> clearGrid());
-        gridPane.add(clearButton, 0, ruudustikuSuurus + 1);
-        Button ennustusButton = new Button("Ennusta");
-        ennustusButton.setOnAction(e -> ennusta());
-        gridPane.add(ennustusButton, 1, ruudustikuSuurus + 1);
+        Button tühjendamisNupp = new Button("Tühjenda ruudustik");
+        tühjendamisNupp.setOnAction(e -> ruudustikuPuhastamine());
+        ruudustik.add(tühjendamisNupp, 7, ruudustikuSuurus + 1, ruudustikuSuurus, 1);
+
+        Button tuvastusNupp = new Button("Tuvasta number");
+        tuvastusNupp.setOnAction(e -> tuvastaNumber());
+        ruudustik.add(tuvastusNupp, 15, ruudustikuSuurus + 1, ruudustikuSuurus, 1);
 
         LogimiseSingleton.getInstants().getLogija().info("Ruudustik loodud");
 
     }
 
-    private void onMousePressed(MouseEvent e) {
-        Rectangle rect = (Rectangle) e.getSource();
-        rect.setFill(värvitud);
-        System.out.println("Mouse pressed at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+    private void hiirVajutatud(MouseEvent e) {
+        // Vajutatud ruut
+        Rectangle ruut = (Rectangle) e.getSource();
+
+        // Värvime ruudu mustaks
+        ruut.setFill(värvitud);
+
         LogimiseSingleton.getInstants().getLogija()
-                .info("Hiirevajutus koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
-                        + GridPane.getRowIndex(rect));
+                .info("Hiirevajutus koordinaatidel: " + ruudustik.getColumnIndex(ruut) + ", "
+                        + ruudustik.getRowIndex(ruut));
     }
 
-    private void onMouseDragEntered(MouseEvent e) {
-        Rectangle rect = (Rectangle) e.getSource();
-        rect.setFill(värvitud);
-        System.out
-                .println("Mouse drag entered at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+    private void lohistamiseTuvastamine(MouseEvent e) {
+        // Ruudu väärtus
+        Rectangle ruut = (Rectangle) e.getSource();
+
+        // Värvime ruudu mustaks
+        ruut.setFill(värvitud);
+
         LogimiseSingleton.getInstants().getLogija()
-                .info("Hiire lohistamine koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
-                        + GridPane.getRowIndex(rect));
+                .info("Hiire lohistamine koordinaatidel: " + ruudustik.getColumnIndex(ruut) + ", "
+                        + ruudustik.getRowIndex(ruut));
     }
 
-    private void onDragDetected(MouseEvent e) {
-        Rectangle rect = (Rectangle) e.getSource();
-        rect.startFullDrag();
-        System.out.println("Drag detected at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+    private void lohistamine(MouseEvent e) {
+        
+        Rectangle ruut = (Rectangle) e.getSource();
+        ruut.startFullDrag();
+
         LogimiseSingleton.getInstants().getLogija()
-                .info("Lohistamine koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
-                        + GridPane.getRowIndex(rect));
+                .info("Lohistamine koordinaatidel: " + ruudustik.getColumnIndex(ruut) + ", "
+                        + ruudustik.getRowIndex(ruut));
     }
 
-    private void clearGrid() {
-        gridPane.getChildren().forEach(node -> {
+    private void ruudustikuPuhastamine() {
+        // Värvi kõik ruudud algvärvi
+        ruudustik.getChildren().forEach(node -> {
             if (node instanceof Rectangle) {
                 ((Rectangle) node).setFill(algVärv);
             }
@@ -93,32 +98,36 @@ public class Controller {
         LogimiseSingleton.getInstants().getLogija().info("Ruudustik tühjendatud");
     }
 
-    private void getData() {
-        // Get the data from the grid
-        // Iterate through the gridPane and get the color of each rectangle
-        // Store the data in a 2D array or other data structure
+    private void andmeteKogumine() {
 
-        gridPane.getChildren().forEach(node -> {
+        ruudustik.getChildren().forEach(node -> {
             if (node instanceof Rectangle) {
                 if (((Rectangle) node).getFill() == värvitud) {
-                    andmed[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] = 255;
+                    andmed[ruudustik.getRowIndex(node)][ruudustik.getColumnIndex(node)] = 255;
                 } else {
-                    andmed[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] = 0;
+                    andmed[ruudustik.getRowIndex(node)][ruudustik.getColumnIndex(node)] = 0;
                 }
             }
         });
-        LogimiseSingleton.getInstants().getLogija().info("Ruudustiku jaoks andmed kogutud");
+        LogimiseSingleton.getInstants().getLogija().info("Ruudustiku andmed kogutud");
 
     }
 
-    private void ennusta() {
-        // Get the data from the grid
-        getData();
+    private void tuvastaNumber() {
+        // Kogume andmed ruudustikult
+        andmeteKogumine();
 
+        // Tuvastame numbri
         Tuvastamine tuvastamine = new Tuvastamine();
-        int ennustus = tuvastamine.tuvasta(andmed);
+        int tuvastatudNumber = tuvastamine.tuvasta(andmed);
 
-        System.out.println("Ennustus: " + ennustus);
-        LogimiseSingleton.getInstants().getLogija().info("Ennustus: " + ennustus);
+        // Kuvame tuvastatud numbri teavitusena
+        javafx.scene.control.Alert teade = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        teade.setTitle("Tuvastatud Number");
+        teade.setHeaderText(null);
+        teade.setContentText("Teie number on: " + tuvastatudNumber);
+        teade.showAndWait();
+        
+        LogimiseSingleton.getInstants().getLogija().info("Tuvastatud number: " + tuvastatudNumber);
     }
 }

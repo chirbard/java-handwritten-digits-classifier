@@ -175,8 +175,13 @@ public class Tuvastamine {
         return jätka;
     }
 
-
-    public static int tuvasta(int[][] andmed) {
+    /**
+     * Tuvastab sisend maatriksi väärtuste põhjal numbri 0 kuni 9.
+     * 
+     * @param andmed      - pildi maatriks massiivina
+     * @return number vahemikus 0-9, mudeli arvamus
+     */
+    public int tuvasta(int[][] andmed) {
         double[] massiiv = Arvutused.intMaatriksDoubleks(andmed);
         return tuvastaNumber(massiiv, vabaliikmed1, kaal1, vabaliikmed2, kaal2);
     }
