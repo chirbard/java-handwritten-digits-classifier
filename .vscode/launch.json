@@ -3,13 +3,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Ekraan",
-            "request": "launch",
-            "mainClass": "Ekraan",
-            "projectName": "java-handwritten-digits-classifier_f135fd8c"
-        },
-        {
-            "type": "java",
             "name": "Launch App",
             "request": "launch",
             "mainClass": "Main",
