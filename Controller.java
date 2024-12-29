@@ -7,20 +7,23 @@ import javafx.scene.input.MouseEvent;
 
 public class Controller {
 
-    private static final int ruudustikuSuurus = 28;  // 28x28 ruudustik
-    private static final int ruuduSuurus = 20;  
-    private static final Color algVärv = Color.WHITE;  // Default cell color
-    private static final Color värvitud = Color.BLACK;  // Highlighted cell color
-    private static final Color piiriVärv = Color.LIGHTGRAY;  // Border color
+    private static final int ruudustikuSuurus = 28; // 28x28 ruudustik
+    private static final int ruuduSuurus = 20;
+    private static final Color algVärv = Color.WHITE; // Default cell color
+    private static final Color värvitud = Color.BLACK; // Highlighted cell color
+    private static final Color piiriVärv = Color.LIGHTGRAY; // Border color
 
     private int[][] andmed = new int[ruudustikuSuurus][ruudustikuSuurus];
 
     @FXML
-    private GridPane gridPane;  // This field is linked to the GridPane in the FXML file
+    private GridPane gridPane; // This field is linked to the GridPane in the FXML file
 
     public void initialize() {
+        LogimiseSingleton.getInstants().getLogija().info("Ruudustiku loomine algas");
+
         if (gridPane == null) {
-            System.out.println("GridPane not initialized");
+            LogimiseSingleton.getInstants().getLogija().severe("Ruudustik pole initsialiseeritud");
+            System.out.println("Ruudustik pole initsialiseeritud");
             return;
         }
 
@@ -28,8 +31,8 @@ public class Controller {
         for (int rida = 0; rida < ruudustikuSuurus; rida++) {
             for (int tulp = 0; tulp < ruudustikuSuurus; tulp++) {
 
-                Rectangle ruut = new Rectangle(ruuduSuurus, ruuduSuurus, algVärv); 
-                ruut.setStroke(piiriVärv);  
+                Rectangle ruut = new Rectangle(ruuduSuurus, ruuduSuurus, algVärv);
+                ruut.setStroke(piiriVärv);
 
                 // Handle mouse events for the rectangles
                 ruut.setOnMousePressed(this::onMousePressed);
@@ -49,24 +52,36 @@ public class Controller {
         ennustusButton.setOnAction(e -> ennusta());
         gridPane.add(ennustusButton, 1, ruudustikuSuurus + 1);
 
+        LogimiseSingleton.getInstants().getLogija().info("Ruudustik loodud");
+
     }
 
     private void onMousePressed(MouseEvent e) {
         Rectangle rect = (Rectangle) e.getSource();
         rect.setFill(värvitud);
         System.out.println("Mouse pressed at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+        LogimiseSingleton.getInstants().getLogija()
+                .info("Hiirevajutus koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
+                        + GridPane.getRowIndex(rect));
     }
 
     private void onMouseDragEntered(MouseEvent e) {
         Rectangle rect = (Rectangle) e.getSource();
         rect.setFill(värvitud);
-        System.out.println("Mouse drag entered at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+        System.out
+                .println("Mouse drag entered at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+        LogimiseSingleton.getInstants().getLogija()
+                .info("Hiire lohistamine koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
+                        + GridPane.getRowIndex(rect));
     }
 
     private void onDragDetected(MouseEvent e) {
         Rectangle rect = (Rectangle) e.getSource();
         rect.startFullDrag();
         System.out.println("Drag detected at: " + GridPane.getColumnIndex(rect) + ", " + GridPane.getRowIndex(rect));
+        LogimiseSingleton.getInstants().getLogija()
+                .info("Lohistamine koordinaatidel: " + GridPane.getColumnIndex(rect) + ", "
+                        + GridPane.getRowIndex(rect));
     }
 
     private void clearGrid() {
@@ -75,6 +90,7 @@ public class Controller {
                 ((Rectangle) node).setFill(algVärv);
             }
         });
+        LogimiseSingleton.getInstants().getLogija().info("Ruudustik tühjendatud");
     }
 
     private void getData() {
@@ -91,8 +107,9 @@ public class Controller {
                 }
             }
         });
+        LogimiseSingleton.getInstants().getLogija().info("Ruudustiku jaoks andmed kogutud");
 
-    }   
+    }
 
     private void ennusta() {
         // Get the data from the grid
@@ -102,5 +119,6 @@ public class Controller {
         int ennustus = tuvastamine.tuvasta(andmed);
 
         System.out.println("Ennustus: " + ennustus);
+        LogimiseSingleton.getInstants().getLogija().info("Ennustus: " + ennustus);
     }
 }
