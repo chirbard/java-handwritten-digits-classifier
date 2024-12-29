@@ -105,8 +105,6 @@ Mudeli hinnang: 2
 
 Kas soovid veel testida? (jah/ei)
 ei
-
-$
 ```
 
 ## GUI

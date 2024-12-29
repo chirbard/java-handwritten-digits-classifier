@@ -6,6 +6,31 @@ import java.util.Scanner;
  * arvutada mudeli vastust ja kuvada numbrit konsooli.
  */
 public class Tuvastamine {
+
+    private static double[] vabaliikmed1 = null;
+    private static double[][] kaal1 = null;
+    private static double[] vabaliikmed2 = null;
+    private static double[][] kaal2 = null;
+
+    public Tuvastamine() {
+        try {
+            Kaalud kaalud = Lugemine.loeJsonKaaludeks("data/kaalud.json");
+            vabaliikmed1 = kaalud.getB1();
+            kaal1 = kaalud.getW1();
+            vabaliikmed2 = kaalud.getB2();
+            kaal2 = kaalud.getW2();
+        } catch (FileNotFoundException e) {
+            LogimiseSingleton.getInstants().getLogija().severe("Faili kaalud.json ei leitud");
+            System.out.println("Faili kaalud.json ei leitud");
+        }
+        
+    }
+
+
+    
+    
+
+
     public static void main(String[] args) {
         // Kirjutame logi faili, et programmi töö algas
         LogimiseSingleton.getInstants().getLogija().info("Rakenduse töö algas");
@@ -19,16 +44,6 @@ public class Tuvastamine {
             } catch (FileNotFoundException e) {
                 LogimiseSingleton.getInstants().getLogija().severe("Faili test.csv ei leitud");
                 System.out.println("Faili test.csv ei leitud");
-                throw e;
-            }
-
-            // Mudeli tööks vajalikud kaalud ja vabaliikmed
-            Kaalud kaalud;
-            try {
-                kaalud = Lugemine.loeJsonKaaludeks("data/kaalud.json");
-            } catch (FileNotFoundException e) {
-                LogimiseSingleton.getInstants().getLogija().severe("Faili kaalud.json ei leitud");
-                System.out.println("Faili kaalud.json ei leitud");
                 throw e;
             }
 
@@ -67,7 +82,7 @@ public class Tuvastamine {
 
                 KonsooliPilt.intensiivsusPilt(28, 28, pildid[pildiIndeks]);
 
-                int mudeliHinnang = tuvastaNumber(pilt, kaalud.getB1(), kaalud.getW1(), kaalud.getB2(), kaalud.getW2());
+                int mudeliHinnang = tuvastaNumber(pilt, vabaliikmed1, kaal1, vabaliikmed2, kaal2);
 
                 LogimiseSingleton.getInstants().getLogija().info("Mudeli hinnang: " + mudeliHinnang);
 
@@ -158,5 +173,16 @@ public class Tuvastamine {
         }
         System.out.println();
         return jätka;
+    }
+
+    /**
+     * Tuvastab sisend maatriksi väärtuste põhjal numbri 0 kuni 9.
+     * 
+     * @param andmed      - pildi maatriks massiivina
+     * @return number vahemikus 0-9, mudeli arvamus
+     */
+    public int tuvasta(int[][] andmed) {
+        double[] massiiv = Arvutused.intMaatriksDoubleks(andmed);
+        return tuvastaNumber(massiiv, vabaliikmed1, kaal1, vabaliikmed2, kaal2);
     }
 }
