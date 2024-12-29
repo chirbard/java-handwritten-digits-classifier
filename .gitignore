@@ -3,3 +3,7 @@ data/*.csv
 *.class
 
 logid/*
+
+bin
+
+/lib/libjfxwebkit.so

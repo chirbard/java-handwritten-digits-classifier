@@ -157,4 +157,25 @@ public class Arvutused {
         }
         return doubleMassiiv;
     }
+
+     /**
+     * Teisendab sisendmaatriksi int tüübist double tüüpi massiiviks,
+     * normaliseerides väärtused vahemikku [0, 1].
+     * 
+     * @param maatriks - int[][] maatriks, mida soovime teisendada
+     * @return double[] massiiv, kus iga väärtus on vahemikus [0, 1]
+     */
+    public static double[] intMaatriksDoubleks(int[][] maatriks) {
+        double[] doubleMassiiv = new double[maatriks.length * maatriks[0].length];
+        int k = 0;
+        for (int[] massiiv : maatriks) {
+            for (int i = 0; i < maatriks[0].length; i++) {
+                doubleMassiiv[k] = (double) massiiv[i] / 255;
+                k++;
+            }
+        }
+        return doubleMassiiv;
+    }
+
+
 }
